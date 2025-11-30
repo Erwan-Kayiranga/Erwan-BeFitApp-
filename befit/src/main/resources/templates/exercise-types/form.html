@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1 th:text="${type.id == null} ? 'New Exercise Type' : 'Edit Exercise Type'"></h1>
+
+<form th:object="${type}" th:action="@{/exercise-types}" method="post">
+
+    <input type="hidden" th:field="*{id}"/>
+
+    <div>
+        <label>Name:</label>
+        <input th:field="*{name}" required/>
+    </div>
+
+    <div>
+        <label>Description:</label>
+        <textarea th:field="*{description}"></textarea>
+    </div>
+
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

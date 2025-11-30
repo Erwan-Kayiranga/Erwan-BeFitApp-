@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<th:block th:insert="fragments/header :: body" th:with="page='home'"></th:block>
+
+<h1 class="mb-4">Welcome to BeFit</h1>
+
+<div class="card p-4 shadow-sm">
+    <p>This is your personal fitness tracker. Use the navigation above to manage your training sessions.</p>
+
+    <a href="/sessions" class="btn btn-primary mt-3">View Sessions</a>
+    <a href="/sessions/new" class="btn btn-success mt-3">Add New Session</a>
+</div>
+
+<!-- FOOTER -->
+<th:block th:insert="fragments/footer :: body"></th:block>
+
+</html>

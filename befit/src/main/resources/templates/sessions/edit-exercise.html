@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Exercise</title>
+</head>
+<body>
+
+<h1>Edit Exercise</h1>
+
+<form th:action="@{'/sessions/' + ${sessionId} + '/exercise/' + ${exercise.id} + '/edit'}"
+      th:object="${exercise}" method="post">
+
+    <label>Exercise Type:</label>
+    <select th:field="*{exerciseType}">
+        <option th:each="t : ${exerciseTypes}"
+                th:value="${t.id}"
+                th:text="${t.name}">
+        </option>
+    </select><br>
+
+    <label>Reps:</label>
+    <input type="number" min="1" th:field="*{reps}"><br>
+
+    <label>Weight:</label>
+    <input type="number" step="0.1" th:field="*{weight}"><br>
+
+    <button type="submit">Save</button>
+</form>
+
+<br>
+<a th:href="@{'/sessions/' + ${sessionId}}">Cancel</a>
+
+</body>
+</html>

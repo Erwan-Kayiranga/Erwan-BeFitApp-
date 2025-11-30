@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Progress Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>Your Progress</h1>
+
+<!-- Graph 1: Total reps -->
+<canvas id="repsChart" width="400" height="200"></canvas>
+
+<!-- Graph 2: Total weight -->
+<canvas id="weightChart" width="400" height="200"></canvas>
+
+<!-- Graph 3: Sessions per month -->
+<canvas id="sessionsChart" width="400" height="200"></canvas>
+
+<script>
+    let sessions = /*[[${sessions}]]*/ [];
+
+    let labels = sessions.map(s => s.date);
+    let totalReps = sessions.map(s => s.totalReps);
+    let totalWeight = sessions.map(s => s.totalWeight);
+
+    // ---- Chart 1: Reps over time ----
+    new Chart(document.getElementById('repsChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Reps',
+                data: totalReps,
+                borderWidth: 2
+            }]
+        }
+    });
+
+    // ---- Chart 2: Weight over time ----
+    new Chart(document.getElementById('weightChart'), {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Weight (kg)',
+                data: totalWeight,
+                borderWidth: 2
+            }]
+        }
+    });
+
+    // ---- Chart 3: Sessions per month ----
+    let monthCount = {};
+
+    sessions.forEach(s => {
+        let month = s.date.substring(0, 7); // YYYY-MM
+        monthCount[month] = (monthCount[month] || 0) + 1;
+    });
+
+    new Chart(document.getElementById('sessionsChart'), {
+        type: 'bar',
+        data: {
+            labels: Object.keys(monthCount),
+            datasets: [{
+                label: 'Sessions per Month',
+                data: Object.values(monthCount),
+                borderWidth: 2
+            }]
+        }
+    });
+</script>
+
+</body>
+</html>
+
+</body>
+</html>

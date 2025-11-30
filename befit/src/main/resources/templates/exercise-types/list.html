@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1>Exercise Types</h1>
+
+<a th:href="@{/exercise-types/new}"
+   sec:authorize="hasRole('ADMIN')">Add Exercise Type</a>
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+
+    <tr th:each="t : ${types}">
+        <td th:text="${t.name}"></td>
+        <td th:text="${t.description}"></td>
+        <td>
+            <a th:href="@{'/exercise-types/' + ${t.id}}">Details</a>
+            <a th:href="@{'/exercise-types/' + ${t.id} + '/edit'}"
+               sec:authorize="hasRole('ADMIN')">Edit</a>
+
+            <form th:action="@{'/exercise-types/' + ${t.id} + '/delete'}"
+                  method="post" sec:authorize="hasRole('ADMIN')">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

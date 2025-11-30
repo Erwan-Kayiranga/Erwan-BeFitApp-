@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<th:block th:insert="fragments/header :: body" th:with="page='sessions'"></th:block>
+
+<h2 class="mb-4">Your Training Sessions</h2>
+
+<!-- FILTERS -->
+<div class="card p-3 mb-4 shadow-sm">
+
+    <form method="get" action="/sessions" class="row g-3">
+        <div class="col-md-3">
+            <label class="form-label">Start Date</label>
+            <input type="date" name="startDate" class="form-control" th:value="${startDate}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">End Date</label>
+            <input type="date" name="endDate" class="form-control" th:value="${endDate}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Sort</label>
+            <select name="sort" class="form-select">
+                <option value="desc" th:selected="${sort=='desc'}">Newest First</option>
+                <option value="asc" th:selected="${sort=='asc'}">Oldest First</option>
+            </select>
+        </div>
+
+        <div class="col-md-3 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Apply</button>
+        </div>
+
+    </form>
+
+    <a href="/sessions" class="btn btn-secondary mt-3">Clear Filters</a>
+</div>
+
+<!-- SESSIONS TABLE -->
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Notes</th>
+                <th>Exercises</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="s : ${sessions}">
+                <td th:text="${s.date}"></td>
+                <td th:text="${s.notes}"></td>
+                <td th:text="${s.exercises.size()}"></td>
+
+                <td class="text-end">
+                    <a th:href="@{'/sessions/' + ${s.id} + '/exercises/add'}"
+                       class="btn btn-sm btn-success">Add Exercise</a>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+
+    </div>
+</div>
+
+<a href="/sessions/new" class="btn btn-primary mt-4">➕ New Session</a>
+
+<!-- FOOTER -->
+<th:block th:insert="fragments/footer :: body"></th:block>
+
+</html>

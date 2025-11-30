@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1 th:text="${type.name}"></h1>
+
+<p><strong>Description:</strong> <span th:text="${type.description}"></span></p>
+
+<a th:href="@{/exercise-types}">Back</a>
+
+</body>
+</html>

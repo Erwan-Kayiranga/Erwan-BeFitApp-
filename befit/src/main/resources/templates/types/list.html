@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<h1>Exercise Types</h1>
+
+<table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+
+    <tr th:each="t : ${types}">
+        <td th:text="${t.name}"></td>
+        <td th:text="${t.description}"></td>
+        <td>
+            <a th:href="@{'/types/edit/' + ${t.id}}">Edit</a>
+            <form th:action="@{'/types/delete/' + ${t.id}}" method="post" style="display:inline-block">
+                <button type="submit">Delete</button>
+            </form>
+        </td>
+    </tr>
+
+</table>
+
+<a th:href="@{/types/create}">New Type</a>
+
+</body>
+</html>

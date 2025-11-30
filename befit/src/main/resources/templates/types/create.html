@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Exercise Type</title>
+</head>
+<body>
+
+<h1>Create Exercise Type</h1>
+
+<form th:action="@{/types/create}" th:object="${exerciseType}" method="post">
+    <label>Name:</label>
+    <input type="text" th:field="*{name}" />
+    <br>
+
+    <label>Description:</label>
+    <textarea th:field="*{description}"></textarea>
+    <br>
+
+    <button type="submit">Save</button>
+</form>
+
+</body>
+</html>

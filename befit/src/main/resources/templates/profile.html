@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Profile</title>
+</head>
+<body>
+
+<h1>Your Profile</h1>
+
+<p><strong>Username:</strong> <span th:text="${username}"></span></p>
+
+<h2>Statistics</h2>
+<ul>
+    <li><strong>Total Training Sessions:</strong> <span th:text="${totalSessions}"></span></li>
+    <li><strong>Total Exercises Logged:</strong> <span th:text="${totalExercises}"></span></li>
+    <li><strong>Total Reps Completed:</strong> <span th:text="${totalReps}"></span></li>
+    <li><strong>Total Weight Lifted:</strong> <span th:text="${totalWeight}"></span> kg</li>
+</ul>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>

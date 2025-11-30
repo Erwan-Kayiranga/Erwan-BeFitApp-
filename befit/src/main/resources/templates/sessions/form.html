@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Training Session</title>
+</head>
+<body>
+
+<h1>Create Training Session</h1>
+
+<form th:action="@{/sessions}" th:object="${trainingSession}" method="post">
+
+    <label>Date:</label>
+    <input type="date" th:field="*{date}" required />
+
+    <label>Notes:</label>
+    <textarea th:field="*{notes}"></textarea>
+
+    <h3>Exercises</h3>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Type</th>
+            <th>Reps</th>
+            <th>Weight</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="exercise, i : *{exercises}">
+            <td>
+                <select th:field="*{exercises[__${i.index}__].exerciseType}">
+                    <option th:each="t : ${exerciseTypes}"
+                            th:value="${t.id}"
+                            th:text="${t.name}"></option>
+                </select>
+            </td>
+
+            <td>
+                <input type="number" th:field="*{exercises[__${i.index}__].reps}" min="1" />
+            </td>
+
+            <td>
+                <input type="number" th:field="*{exercises[__${i.index}__].weight}" step="0.1" />
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button type="submit">Save</button>
+
+</form>
+
+</body>
+</html>

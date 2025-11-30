@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -15,17 +16,36 @@ public class TrainingSessionController {
 
     private final TrainingSessionRepository trainingSessionRepository;
 
-    public TrainingSessionController(TrainingSessionRepository trainingSessionRepository) {
-        this.trainingSessionRepository = trainingSessionRepository;
+    public TrainingSessionController(TrainingSessionRepository repo) {
+        this.trainingSessionRepository = repo;
     }
 
     @GetMapping
-    public String list(Model model, Authentication auth) {
+    public String list(
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(defaultValue = "desc") String sort,
+            Authentication auth,
+            Model model) {
+
         String username = auth.getName();
+
         List<TrainingSession> sessions =
-                trainingSessionRepository.findByUsernameOrderByStartTimeDesc(username);
+                sort.equals("asc") ?
+                        trainingSessionRepository.findByUsernameOrderByDateAsc(username) :
+                        trainingSessionRepository.findByUsernameOrderByDateDesc(username);
+
+        if (startDate != null)
+            sessions.removeIf(s -> s.getDate().isBefore(startDate));
+
+        if (endDate != null)
+            sessions.removeIf(s -> s.getDate().isAfter(endDate));
 
         model.addAttribute("sessions", sessions);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("sort", sort);
+
         return "session/list";
     }
 
@@ -38,26 +58,7 @@ public class TrainingSessionController {
     @PostMapping
     public String create(@ModelAttribute TrainingSession session, Authentication auth) {
         session.setUsername(auth.getName());
-        S save = TrainingSessionRepository.save(session);
-        return "redirect:/sessions";
-    }
-
-    @GetMapping("/{id}")
-    public String details(@PathVariable Long id, Model model, Authentication auth) {
-        TrainingSession ts = trainingSessionRepository.findById(id).orElseThrow();
-        if (!ts.getUsername().equals(auth.getName()))
-            return "redirect:/sessions";
-        model.addAttribute("session", ts);
-        return "session/details";
-    }
-
-    @PostMapping("/{id}/delete")
-    public String delete(@PathVariable Long id, Authentication auth) {
-        TrainingSession ts = trainingSessionRepository.findById(id).orElseThrow();
-        if (!ts.getUsername().equals(auth.getName()))
-            return "redirect:/sessions";
-
-        trainingSessionRepository.delete(ts);
+        trainingSessionRepository.save(session);
         return "redirect:/sessions";
     }
 }

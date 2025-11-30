@@ -2,7 +2,7 @@ package com.befit.befit.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +14,7 @@ public class TrainingSession {
     private Long id;
 
     @NotNull
-    private LocalDateTime startTime;
-
-    @NotNull
-    private LocalDateTime endTime;
+    private LocalDate date;
 
     private String notes;
 
@@ -27,25 +24,40 @@ public class TrainingSession {
     @OneToMany(mappedBy = "trainingSession", cascade = CascadeType.ALL)
     private List<Exercise> exercises = new ArrayList<>();
 
-    // helper
     public void addExercise(Exercise e) {
         exercises.add(e);
         e.setTrainingSession(this);
     }
 
-    // getters
-    public Long getId() { return id; }
-    public LocalDateTime getStartTime() { return startTime; }
-    public LocalDateTime getEndTime() { return endTime; }
-    public String getNotes() { return notes; }
-    public String getUsername() { return username; }
-    public List<Exercise> getExercises() { return exercises; }
+    public double getTotalWeight() {
+        return exercises.stream()
+                .mapToDouble(e -> e.getWeight() != null ? e.getWeight() : 0)
+                .sum();
+    }
 
-    // setters
+    public int getTotalReps() {
+        return exercises.stream()
+                .mapToInt(Exercise::getReps)
+                .sum();
+    }
+
+    public int getExerciseCount() {
+        return exercises.size();
+    }
+
+    // getters & setters
+    public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public void setStartTime(LocalDateTime startTime) { this.startTime = startTime; }
-    public void setEndTime(LocalDateTime endTime) { this.endTime = endTime; }
+
+    public LocalDate getDate() { return date; }
+    public void setDate(LocalDate date) { this.date = date; }
+
+    public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
+
+    public List<Exercise> getExercises() { return exercises; }
     public void setExercises(List<Exercise> exercises) { this.exercises = exercises; }
 }

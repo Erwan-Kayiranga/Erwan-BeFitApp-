@@ -19,57 +19,24 @@ public class Exercise {
     @JoinColumn(name = "training_session_id", nullable = false)
     private TrainingSession trainingSession;
 
-    // 👉 number of sets
     @NotNull
     @Min(1)
-    private Integer sets;
+    private Integer reps;
 
-    // 👉 repetitions per set
-    @NotNull
-    @Min(1)
-    private Integer repsPerSet;
-
-    // 👉 used weight (can be 0 for bodyweight)
-    @NotNull
-    @Min(0)
     private Double weight;
 
-    // ---------- GETTERS & SETTERS ----------
-
+    // getters & setters
     public Long getId() { return id; }
 
-    public ExerciseType getExerciseType() {
-        return exerciseType;
-    }
-    public void setExerciseType(ExerciseType exerciseType) {
-        this.exerciseType = exerciseType;
-    }
+    public ExerciseType getExerciseType() { return exerciseType; }
+    public void setExerciseType(ExerciseType exerciseType) { this.exerciseType = exerciseType; }
 
-    public TrainingSession getTrainingSession() {
-        return trainingSession;
-    }
-    public void setTrainingSession(TrainingSession trainingSession) {
-        this.trainingSession = trainingSession;
-    }
+    public TrainingSession getTrainingSession() { return trainingSession; }
+    public void setTrainingSession(TrainingSession trainingSession) { this.trainingSession = trainingSession; }
 
-    public Integer getSets() {
-        return sets;
-    }
-    public void setSets(Integer sets) {
-        this.sets = sets;
-    }
+    public Integer getReps() { return reps; }
+    public void setReps(Integer reps) { this.reps = reps; }
 
-    public Integer getRepsPerSet() {
-        return repsPerSet;
-    }
-    public void setRepsPerSet(Integer repsPerSet) {
-        this.repsPerSet = repsPerSet;
-    }
-
-    public Double getWeight() {
-        return weight;
-    }
-    public void setWeight(Double weight) {
-        this.weight = weight;
-    }
+    public Double getWeight() { return weight; }
+    public void setWeight(Double weight) { this.weight = weight; }
 }

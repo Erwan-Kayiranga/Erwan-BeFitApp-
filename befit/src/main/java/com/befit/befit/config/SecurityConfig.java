@@ -20,7 +20,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")              // <-- lowercase correct
+                        .loginPage("/login")
                         .defaultSuccessUrl("/sessions", true)
                         .permitAll()
                 )

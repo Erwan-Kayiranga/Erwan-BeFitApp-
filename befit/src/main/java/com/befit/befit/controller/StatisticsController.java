@@ -1,78 +1,49 @@
 package com.befit.befit.controller;
 
-import com.befit.befit.model.Exercise;
-import com.befit.befit.repository.TrainingSessionRepository;
-
+import com.befit.befit.model.ExerciseType;
+import com.befit.befit.repository.ExerciseRepository;
+import com.befit.befit.repository.ExerciseTypeRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class StatisticsController {
 
-    private final TrainingSessionRepository repo;
+    @PersistenceContext
+    private EntityManager em;
 
-    public StatisticsController(TrainingSessionRepository repo) {
-        this.repo = repo;
+    private final ExerciseTypeRepository typeRepo;
+
+    public StatisticsController(ExerciseTypeRepository typeRepo) {
+        this.typeRepo = typeRepo;
     }
 
     @GetMapping("/stats")
     public String stats(Authentication auth, Model model) {
 
-        LocalDateTime since = LocalDateTime.now().minusWeeks(4);
+        LocalDate since = LocalDate.now().minusWeeks(4);
 
-        List<TrainingSession> sessions =
-                repo.findByUsernameAndStartTimeAfter(auth.getName(), since);
+        List<Object[]> results = em.createQuery("""
+           select et.name, count(e.id)
+           from Exercise e
+           join e.exerciseType et
+           join e.trainingSession ts
+           where ts.username = :username
+             and ts.date >= :since
+           group by et.name
+        """, Object[].class)
+                .setParameter("username", auth.getName())
+                .setParameter("since", since)
+                .getResultList();
 
-        Map<String, Long> countByType =
-                sessions.stream()
-                        .flatMap(s -> s.getExercises().stream())
-                        .collect(Collectors.groupingBy(
-                                e -> e.getExerciseType().getName(),
-                                Collectors.counting()
-                        ));
-
-        Map<String, Integer> totalRepsByType =
-                sessions.stream()
-                        .flatMap(s -> s.getExercises().stream())
-                        .collect(Collectors.groupingBy(
-                                e -> e.getExerciseType().getName(),
-                                Collectors.summingInt(Exercise::getTotalReps)
-                        ));
-
-        Map<String, Double> maxWeightByType =
-                sessions.stream()
-                        .flatMap(s -> s.getExercises().stream())
-                        .collect(Collectors.groupingBy(
-                                e -> e.getExerciseType().getName(),
-                                Collectors.collectingAndThen(
-                                        Collectors.mapping(
-                                                Exercise::getWeight,
-                                                Collectors.maxBy(Double::compare)
-                                        ),
-                                        opt -> opt.orElse(0.0)
-                                )
-                        ));
-
-        Map<String, Double> avgWeightByType =
-                sessions.stream()
-                        .flatMap(s -> s.getExercises().stream())
-                        .collect(Collectors.groupingBy(
-                                e -> e.getExerciseType().getName(),
-                                Collectors.averagingDouble(Exercise::getWeight)
-                        ));
-
-        model.addAttribute("countByType", countByType);
-        model.addAttribute("totalRepsByType", totalRepsByType);
-        model.addAttribute("avgWeightByType", avgWeightByType);
-        model.addAttribute("maxWeightByType", maxWeightByType);
-
-        return "stats";
+        model.addAttribute("stats", results);
+        return "stats/index";
     }
 }

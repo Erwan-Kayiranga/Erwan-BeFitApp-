@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<!-- HEADER -->
-<th:block th:replace="~{fragments/header :: body(page='home')}"></th:block>
+<th:block th:replace="fragments/header :: body(page='home')"></th:block>
 
 <h1 class="mb-4">Welcome to BeFit</h1>
 
@@ -13,7 +12,6 @@
     <a href="/sessions/new" class="btn btn-success mt-3">Add New Session</a>
 </div>
 
-<!-- FOOTER -->
-<th:block th:replace="~{fragments/footer :: body}"></th:block>
+<th:block th:replace="fragments/footer :: body"></th:block>
 
 </html>

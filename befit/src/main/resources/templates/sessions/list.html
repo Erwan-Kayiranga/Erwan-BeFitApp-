@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<!-- HEADER -->
-<th:block th:replace="~{fragments/header :: body(page='sessions')}"></th:block>
+<th:block th:replace="fragments/header :: body(page='sessions')"></th:block>
 
 <h2 class="mb-4">Your Training Sessions</h2>
 
-<!-- FILTERS -->
 <div class="card p-3 mb-4 shadow-sm">
 
     <form method="get" action="/sessions" class="row g-3">
@@ -31,13 +29,11 @@
         <div class="col-md-3 d-flex align-items-end">
             <button class="btn btn-primary w-100">Apply</button>
         </div>
-
     </form>
 
     <a href="/sessions" class="btn btn-secondary mt-3">Clear Filters</a>
 </div>
 
-<!-- SESSIONS TABLE -->
 <div class="card shadow-sm">
     <div class="card-body">
 
@@ -63,15 +59,12 @@
                 </td>
             </tr>
             </tbody>
-
         </table>
-
     </div>
 </div>
 
 <a href="/sessions/new" class="btn btn-primary mt-4">➕ New Session</a>
 
-<!-- FOOTER -->
-<th:block th:replace="~{fragments/footer :: body}"></th:block>
+<th:block th:replace="fragments/footer :: body"></th:block>
 
 </html>

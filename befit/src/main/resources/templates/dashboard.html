@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<!-- HEADER -->
+<th:block th:replace="~{fragments/header :: body(page='dashboard')}"></th:block>
+
+<h2 class="mb-4">Dashboard</h2>
+
+<!-- SUMMARY CARDS -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Sessions</h5>
+                <p class="card-text fs-3" th:text="${totalSessions}">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Reps</h5>
+                <p class="card-text fs-3" th:text="${totalReps}">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card text-bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Weight (kg)</h5>
+                <p class="card-text fs-3"
+                   th:text="${#numbers.formatDecimal(totalWeight, 0, 'COMMA', 1, 'POINT')}">
+                    0
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RECENT SESSIONS TABLE -->
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h4 class="card-title mb-3">Recent Sessions</h4>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Notes</th>
+                <th>Exercises</th>
+                <th>Total Reps</th>
+                <th>Total Weight</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="s : ${sessions}">
+                <td th:text="${s.date}">2025-01-01</td>
+                <td th:text="${s.notes}">Notes</td>
+                <td th:text="${s.exerciseCount} ?: ${s.exercises.size()}">0</td>
+                <td th:text="${s.totalReps} ?: ${s.getTotalReps()}">0</td>
+                <td th:text="${s.totalWeight} ?: ${s.getTotalWeight()}">0</td>
+                <td class="text-end">
+                    <a th:href="@{'/sessions/' + ${s.id} + '/exercises/add'}"
+                       class="btn btn-sm btn-outline-primary">
+                        Details / Edit
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<th:block th:replace="~{fragments/footer :: body}"></th:block>
+
+</html>

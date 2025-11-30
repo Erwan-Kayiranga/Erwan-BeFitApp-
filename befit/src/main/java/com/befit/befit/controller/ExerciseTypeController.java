@@ -2,13 +2,17 @@ package com.befit.befit.controller;
 
 import com.befit.befit.model.ExerciseType;
 import com.befit.befit.repository.ExerciseTypeRepository;
+
+import jakarta.validation.Valid;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/types")
+@PreAuthorize("hasRole('ADMIN')")
 public class ExerciseTypeController {
 
     private final ExerciseTypeRepository repo;
@@ -23,38 +27,37 @@ public class ExerciseTypeController {
         return "types/list";
     }
 
-    @GetMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String createForm(Model model) {
+    @GetMapping("/new")
+    public String newType(Model model) {
         model.addAttribute("type", new ExerciseType());
-        return "types/create";
+        return "types/form";
     }
 
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String save(@ModelAttribute ExerciseType type) {
+    @PostMapping("/new")
+    public String create(@Valid @ModelAttribute("type") ExerciseType type,
+                         BindingResult result) {
+        if (result.hasErrors()) return "types/form";
         repo.save(type);
         return "redirect:/types";
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String editForm(@PathVariable Long id, Model model) {
-        ExerciseType type = repo.findById(id).orElseThrow();
-        model.addAttribute("type", type);
-        return "types/edit";
+    public String edit(@PathVariable Long id, Model model) {
+        model.addAttribute("type", repo.findById(id).orElseThrow());
+        return "types/form";
     }
 
     @PostMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public String update(@PathVariable Long id, @ModelAttribute ExerciseType type) {
+    public String update(@PathVariable Long id,
+                         @Valid @ModelAttribute("type") ExerciseType type,
+                         BindingResult result) {
+        if (result.hasErrors()) return "types/form";
         type.setId(id);
         repo.save(type);
         return "redirect:/types";
     }
 
-    @PostMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id) {
         repo.deleteById(id);
         return "redirect:/types";

@@ -20,8 +20,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/sessions")   // ✅ FIXED
+                        .loginPage("/login")              // <-- lowercase correct
+                        .defaultSuccessUrl("/sessions", true)
                         .permitAll()
                 )
                 .logout(logout -> logout

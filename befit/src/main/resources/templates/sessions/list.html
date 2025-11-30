@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <!-- HEADER -->
-<th:block th:insert="fragments/header :: body" th:with="page='sessions'"></th:block>
+<th:block th:replace="~{fragments/header :: body(page='sessions')}"></th:block>
 
 <h2 class="mb-4">Your Training Sessions</h2>
 
@@ -72,6 +72,6 @@
 <a href="/sessions/new" class="btn btn-primary mt-4">➕ New Session</a>
 
 <!-- FOOTER -->
-<th:block th:insert="fragments/footer :: body"></th:block>
+<th:block th:replace="~{fragments/footer :: body}"></th:block>
 
 </html>

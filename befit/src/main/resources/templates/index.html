@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <!-- HEADER -->
-<th:block th:insert="fragments/header :: body" th:with="page='home'"></th:block>
+<th:block th:replace="~{fragments/header :: body(page='home')}"></th:block>
 
 <h1 class="mb-4">Welcome to BeFit</h1>
 
@@ -14,6 +14,6 @@
 </div>
 
 <!-- FOOTER -->
-<th:block th:insert="fragments/footer :: body"></th:block>
+<th:block th:replace="~{fragments/footer :: body}"></th:block>
 
 </html>

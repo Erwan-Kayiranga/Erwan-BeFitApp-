@@ -4,7 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,17 +16,12 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/css/**", "/js/**").permitAll()
-                        .requestMatchers("/dashboard").authenticated()
-                        .requestMatchers("/profile").authenticated()
-                        .requestMatchers("/sessions/**").authenticated()
-                        .requestMatchers("/exercise/**").authenticated()
-                        .requestMatchers("/exercise-types/**").authenticated()
+                        .requestMatchers("/", "/login", "/register", "/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/dashboard", true)
+                        .defaultSuccessUrl("/sessions")   // ✅ FIXED
                         .permitAll()
                 )
                 .logout(logout -> logout
@@ -41,17 +35,11 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService() {
-
-        UserDetails user = User.withUsername("user")
-                .password("{noop}123")
+        var user = User.withUsername("user")
+                .password("{noop}password")
                 .roles("USER")
                 .build();
 
-        UserDetails admin = User.withUsername("admin")
-                .password("{noop}admin")
-                .roles("ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, admin);
+        return new InMemoryUserDetailsManager(user);
     }
 }
